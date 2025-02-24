@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CreditMaster Pro - MVP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0B0F19;
+            --card-bg: #161D2F;
+            --primary: #6366F1;
+            --text: #E0E7FF;
+            --success: #10B981;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            margin: 0;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 0;
+            border-bottom: 1px solid #1E293B;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(45deg, #6366F1, #8B5CF6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .filters {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .filter-group {
+            position: relative;
+            flex: 1;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #94A3B8;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 6px;
+            background: #334155;
+            border-radius: 4px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 0.8rem;
+            background: #1E293B;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input[type="number"]:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .bank-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .bank-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .bank-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+
+        .bank-logo {
+            height: 40px;
+            margin-bottom: 1rem;
+        }
+
+        .rate-badge {
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            padding: 0.8rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #1E293B;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #8B5CF6);
+            width: var(--progress);
+            transition: width 0.5s ease;
+        }
+
+        .bank-features {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+
+        .bank-features li {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 0;
+            color: #94A3B8;
+        }
+
+        .bank-features li::before {
+            content: "✓";
+            color: var(--success);
+        }
+
+        .disclaimer {
+            text-align: center;
+            margin-top: 3rem;
+            color: #64748B;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CreditMaster Pro</h1>
+            <p>Plateforme d'optimisation de financement pour professionnels</p>
+        </div>
+
+        <div class="filters">
+            <div class="filter-group">
+                <label>💰 Montant du prêt (€)</label>
+                <input type="range" id="amount" min="100000" max="1000000" value="350000">
+                <div class="value-display" id="amountValue">350 000 €</div>
+            </div>
+            
+            <div class="filter-group">
+                <label>💼 Revenu mensuel net (€)</label>
+                <input type="number" id="income" value="4500">
+            </div>
+            
+            <div class="filter-group">
+                <label>⏳ Durée (années)</label>
+                <input type="number" id="duration" min="10" max="25" value="15">
+            </div>
+        </div>
+
+        <div class="bank-grid" id="results"></div>
+
+        <div class="disclaimer">
+            * Les taux indiqués sont calculés sur la base des critères standards de chaque établissement (TAEG moyen)
+        </div>
+    </div>
+
+<script>
+const calculateRate = (bank, amount, duration, income) => {
+    // Formule simplifiée de calcul de taux réaliste
+    const baseRate = bank.baseRate;
+    const riskFactor = (amount / (income * 12)) / 100;
+    const durationAdjustment = duration * 0.02;
+    
+    return Math.min(baseRate + riskFactor + durationAdjustment, bank.maxRate).toFixed(2);
+};
+
+const banks = [
+    {
+        name: "BNP Paribas",
+        logo: "https://logo.clearbit.com/bnpparibas.fr",
+        baseRate: 2.4,
+        maxRate: 3.8,
+        features: [
+            "Prêt amortissable",
+            "Différé partiel possible",
+            "Assurance intégrée",
+            "Frais de dossier : 0.5%"
+        ],
+        acceptanceThreshold: 0.6
+    },
+    {
+        name: "Crédit Agricole",
+        logo: "https://logo.clearbit.com/credit-agricole.fr",
+        baseRate: 2.6,
+        maxRate: 4.0,
+        features: [
+            "Option taux fixe 25 ans",
+            "Compte professionnel inclus",
+            "Garantie locative",
+            "Frais de dossier : 999€"
+        ],
+        acceptanceThreshold: 0.7
+    },
+    {
+        name: "Société Générale",
+        logo: "https://logo.clearbit.com/societegenerale.fr",
+        baseRate: 2.5,
+        maxRate: 3.9,
+        features: [
+            "Prêt relais intégré",
+            "Accès banque digitale",
+            "Analyste dédié",
+            "Frais de dossier : 0€"
+        ],
+        acceptanceThreshold: 0.65
+    },
+    {
+        name: "Hello Bank! (BNP)",
+        logo: "https://logo.clearbit.com/hellobank.fr",
+        baseRate: 2.3,
+        maxRate: 3.5,
+        features: [
+            "100% Digital",
+            "Décision en 48h",
+            "Pas de frais cachés",
+            "Simulations illimitées"
+        ],
+        acceptanceThreshold: 0.55
+    }
+];
+
+function updateResults() {
+    const amount = parseInt(document.getElementById('amount').value);
+    const income = parseInt(document.getElementById('income').value);
+    const duration = parseInt(document.getElementById('duration').value);
+
+    const resultsHTML = banks.map(bank => {
+        const rate = calculateRate(bank, amount, duration, income);
+        const acceptanceProbability = Math.min(
+            Math.floor(
+                (income * 45) / (amount / 10000) * 
+                (bank.acceptanceThreshold * 100)
+            ), 95
+        );
+
+        return `
+            <div class="bank-card">
+                <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem">
+                    <img src="${bank.logo}" class="bank-logo" alt="${bank.name}">
+                </div>
+                
+                <div class="rate-badge">
+                    ${rate}% TAEG*
+                </div>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="--progress: ${acceptanceProbability}%"></div>
+                </div>
+                <small style="display: block; text-align: right">Probabilité d'acceptation: ${acceptanceProbability}%</small>
+
+                <ul class="bank-features">
+                    ${bank.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
+
+                <div style="text-align: center; margin-top: 1.5rem">
+                    <button style="
+                        background: var(--primary);
+                        border: none;
+                        padding: 0.8rem 2rem;
+                        border-radius: 8px;
+                        color: white;
+                        cursor: pointer;
+                        transition: transform 0.2s;
+                    " onmouseover="this.style.transform='scale(1.05)'" 
+                     onmouseout="this.style.transform='scale(1)'">
+                        Déposer dossier
+                    </button>
+                </div>
+            </div>
+        `}).join('');
+
+    document.getElementById('results').innerHTML = resultsHTML;
+}
+
+// Événements
+document.getElementById('amount').addEventListener('input', function(e) {
+    document.getElementById('amountValue').textContent = 
+        `${parseInt(e.target.value).toLocaleString()} €`;
+    updateResults();
+});
+
+document.getElementById('income').addEventListener('input', updateResults);
+document.getElementById('duration').addEventListener('input', updateResults);
+
+// Initialisation
+updateResults();
+</script>
+
+</body>
+</html>
